@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store Rating Platform</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Navigation -->
+        <nav class="navbar hidden" id="navbar">
+            <div class="container">
+                <div class="nav-content">
+                    <div class="nav-brand">
+                        <h2>Store Rating Platform</h2>
+                    </div>
+                    <div class="nav-menu" id="navMenu">
+                        <!-- Navigation items will be populated by JavaScript -->
+                    </div>
+                    <div class="nav-actions">
+                        <span id="userInfo" class="user-info"></span>
+                        <button class="btn btn--outline btn--sm" id="logoutBtn">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Login Page -->
+            <div id="loginPage" class="auth-container">
+                <div class="auth-card">
+                    <h1>Login to Store Rating Platform</h1>
+                    <form id="loginForm" class="auth-form">
+                        <div class="form-group">
+                            <label for="loginEmail" class="form-label">Email</label>
+                            <input type="email" id="loginEmail" class="form-control" required>
+                            <span class="error-message" id="loginEmailError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword" class="form-label">Password</label>
+                            <input type="password" id="loginPassword" class="form-control" required>
+                            <span class="error-message" id="loginPasswordError"></span>
+                        </div>
+                        <button type="submit" class="btn btn--primary btn--full-width">Login</button>
+                        <div class="auth-links">
+                            <a href="#" id="showSignup">Don't have an account? Sign up</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Signup Page -->
+            <div id="signupPage" class="auth-container hidden">
+                <div class="auth-card">
+                    <h1>Sign Up for Store Rating Platform</h1>
+                    <form id="signupForm" class="auth-form">
+                        <div class="form-group">
+                            <label for="signupName" class="form-label">Full Name</label>
+                            <input type="text" id="signupName" class="form-control" required>
+                            <span class="error-message" id="signupNameError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupEmail" class="form-label">Email</label>
+                            <input type="email" id="signupEmail" class="form-control" required>
+                            <span class="error-message" id="signupEmailError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupAddress" class="form-label">Address</label>
+                            <textarea id="signupAddress" class="form-control" rows="3" required></textarea>
+                            <span class="error-message" id="signupAddressError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupPassword" class="form-label">Password</label>
+                            <input type="password" id="signupPassword" class="form-control" required>
+                            <span class="error-message" id="signupPasswordError"></span>
+                        </div>
+                        <button type="submit" class="btn btn--primary btn--full-width">Sign Up</button>
+                        <div class="auth-links">
+                            <a href="#" id="showLogin">Already have an account? Login</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Admin Dashboard -->
+            <div id="adminDashboard" class="dashboard hidden">
+                <div class="container">
+                    <h1>Admin Dashboard</h1>
+                    
+                    <!-- Metrics Cards -->
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <h3>Total Users</h3>
+                            <p class="metric-value" id="totalUsers">0</p>
+                        </div>
+                        <div class="metric-card">
+                            <h3>Total Stores</h3>
+                            <p class="metric-value" id="totalStores">0</p>
+                        </div>
+                        <div class="metric-card">
+                            <h3>Total Ratings</h3>
+                            <p class="metric-value" id="totalRatings">0</p>
+                        </div>
+                    </div>
+
+                    <!-- Admin Actions -->
+                    <div class="admin-actions">
+                        <button class="btn btn--primary" id="addUserBtn">Add New User</button>
+                        <button class="btn btn--primary" id="addStoreBtn">Add New Store</button>
+                    </div>
+
+                    <!-- Users Management -->
+                    <div class="management-section">
+                        <h2>User Management</h2>
+                        <div class="table-controls">
+                            <input type="text" class="form-control" id="userFilter" placeholder="Filter users...">
+                            <select class="form-control" id="roleFilter">
+                                <option value="">All Roles</option>
+                                <option value="ADMIN">Admin</option>
+                                <option value="USER">User</option>
+                                <option value="STORE_OWNER">Store Owner</option>
+                            </select>
+                        </div>
+                        <div class="table-container">
+                            <table class="data-table" id="usersTable">
+                                <thead>
+                                    <tr>
+                                        <th data-sort="name">Name</th>
+                                        <th data-sort="email">Email</th>
+                                        <th data-sort="address">Address</th>
+                                        <th data-sort="role">Role</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTableBody">
+                                    <!-- Users will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Stores Management -->
+                    <div class="management-section">
+                        <h2>Store Management</h2>
+                        <div class="table-controls">
+                            <input type="text" class="form-control" id="storeFilter" placeholder="Filter stores...">
+                        </div>
+                        <div class="table-container">
+                            <table class="data-table" id="storesTable">
+                                <thead>
+                                    <tr>
+                                        <th data-sort="name">Name</th>
+                                        <th data-sort="email">Email</th>
+                                        <th data-sort="address">Address</th>
+                                        <th data-sort="average_rating">Rating</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="storesTableBody">
+                                    <!-- Stores will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Dashboard -->
+            <div id="userDashboard" class="dashboard hidden">
+                <div class="container">
+                    <h1>Store Directory</h1>
+                    
+                    <!-- Store Search -->
+                    <div class="search-section">
+                        <div class="search-controls">
+                            <input type="text" class="form-control" id="storeSearch" placeholder="Search stores by name or address...">
+                        </div>
+                    </div>
+
+                    <!-- Stores List -->
+                    <div class="stores-grid" id="storesGrid">
+                        <!-- Stores will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Store Owner Dashboard -->
+            <div id="storeOwnerDashboard" class="dashboard hidden">
+                <div class="container">
+                    <h1>Store Dashboard</h1>
+                    
+                    <!-- Store Metrics -->
+                    <div class="store-metrics">
+                        <div class="metric-card">
+                            <h3>Average Rating</h3>
+                            <p class="metric-value" id="storeAverageRating">0.0</p>
+                        </div>
+                        <div class="metric-card">
+                            <h3>Total Ratings</h3>
+                            <p class="metric-value" id="storeRatingsCount">0</p>
+                        </div>
+                    </div>
+
+                    <!-- Customer Ratings -->
+                    <div class="ratings-section">
+                        <h2>Customer Ratings</h2>
+                        <div class="ratings-list" id="customerRatings">
+                            <!-- Customer ratings will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Add User Modal -->
+        <div id="addUserModal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Add New User</h2>
+                    <button class="btn btn--outline btn--sm" id="closeAddUserModal">×</button>
+                </div>
+                <form id="addUserForm">
+                    <div class="form-group">
+                        <label for="newUserName" class="form-label">Name</label>
+                        <input type="text" id="newUserName" class="form-control" required>
+                        <span class="error-message" id="newUserNameError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="newUserEmail" class="form-label">Email</label>
+                        <input type="email" id="newUserEmail" class="form-control" required>
+                        <span class="error-message" id="newUserEmailError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="newUserAddress" class="form-label">Address</label>
+                        <textarea id="newUserAddress" class="form-control" rows="3" required></textarea>
+                        <span class="error-message" id="newUserAddressError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="newUserPassword" class="form-label">Password</label>
+                        <input type="password" id="newUserPassword" class="form-control" required>
+                        <span class="error-message" id="newUserPasswordError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="newUserRole" class="form-label">Role</label>
+                        <select id="newUserRole" class="form-control" required>
+                            <option value="">Select Role</option>
+                            <option value="USER">User</option>
+                            <option value="STORE_OWNER">Store Owner</option>
+                            <option value="ADMIN">Admin</option>
+                        </select>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn--outline" id="cancelAddUser">Cancel</button>
+                        <button type="submit" class="btn btn--primary">Add User</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Add Store Modal -->
+        <div id="addStoreModal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Add New Store</h2>
+                    <button class="btn btn--outline btn--sm" id="closeAddStoreModal">×</button>
+                </div>
+                <form id="addStoreForm">
+                    <div class="form-group">
+                        <label for="newStoreName" class="form-label">Store Name</label>
+                        <input type="text" id="newStoreName" class="form-control" required>
+                        <span class="error-message" id="newStoreNameError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="newStoreEmail" class="form-label">Store Email</label>
+                        <input type="email" id="newStoreEmail" class="form-control" required>
+                        <span class="error-message" id="newStoreEmailError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="newStoreAddress" class="form-label">Store Address</label>
+                        <textarea id="newStoreAddress" class="form-control" rows="3" required></textarea>
+                        <span class="error-message" id="newStoreAddressError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="newStoreOwner" class="form-label">Store Owner</label>
+                        <select id="newStoreOwner" class="form-control" required>
+                            <option value="">Select Owner</option>
+                            <!-- Store owners will be populated here -->
+                        </select>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn--outline" id="cancelAddStore">Cancel</button>
+                        <button type="submit" class="btn btn--primary">Add Store</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Rating Modal -->
+        <div id="ratingModal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Rate Store</h2>
+                    <button class="btn btn--outline btn--sm" id="closeRatingModal">×</button>
+                </div>
+                <div class="rating-content">
+                    <h3 id="ratingStoreName"></h3>
+                    <div class="rating-input">
+                        <label>Your Rating:</label>
+                        <div class="stars" id="starsRating">
+                            <span data-rating="1">★</span>
+                            <span data-rating="2">★</span>
+                            <span data-rating="3">★</span>
+                            <span data-rating="4">★</span>
+                            <span data-rating="5">★</span>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn--outline" id="cancelRating">Cancel</button>
+                        <button type="button" class="btn btn--primary" id="submitRating">Submit Rating</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Change Password Modal -->
+        <div id="changePasswordModal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Change Password</h2>
+                    <button class="btn btn--outline btn--sm" id="closeChangePasswordModal">×</button>
+                </div>
+                <form id="changePasswordForm">
+                    <div class="form-group">
+                        <label for="currentPassword" class="form-label">Current Password</label>
+                        <input type="password" id="currentPassword" class="form-control" required>
+                        <span class="error-message" id="currentPasswordError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword" class="form-label">New Password</label>
+                        <input type="password" id="newPassword" class="form-control" required>
+                        <span class="error-message" id="newPasswordError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                        <input type="password" id="confirmPassword" class="form-control" required>
+                        <span class="error-message" id="confirmPasswordError"></span>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn--outline" id="cancelChangePassword">Cancel</button>
+                        <button type="submit" class="btn btn--primary">Change Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
